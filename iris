@@ -1,0 +1,83 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix
+
+# Ladda datasetet
+iris = load_iris()
+X = iris.data
+y = iris.target
+feature_names = iris.feature_names
+target_names = iris.target_names
+
+# Histogram för alla variabler
+plt.figure(figsize=(12, 8))
+for i in range(4):
+    plt.subplot(2, 2, i + 1)
+    plt.hist(X[:, i], bins=20, color="skyblue", edgecolor="black")
+    plt.title(f"Histogram över {feature_names[i]}")
+plt.tight_layout()
+plt.draw()
+plt.pause(4)
+plt.close()
+
+# Scatter plot för två variabler
+plt.figure(figsize=(8, 6))
+plt.scatter(X[:, 0], X[:, 1], c=y, cmap="viridis")
+plt.xlabel(feature_names[0])
+plt.ylabel(feature_names[1])
+plt.title("Scatter plot av två variabler i Iris datasetet")
+plt.draw()
+plt.pause(4)
+plt.close()
+
+# Dela upp data i träning och test
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Träna modellen
+modell = RandomForestClassifier(
+    n_estimators=150,
+    random_state=42
+)
+modell.fit(X_train, y_train)
+
+# Förutsägelser
+y_pred = modell.predict(X_test)
+
+# Utvärdering
+noggrannhet = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred, average="macro")
+recall = recall_score(y_test, y_pred, average="macro")
+
+print("Noggrannhet:", round(noggrannhet, 3))
+print("Precision:", round(precision, 3))
+print("Recall:", round(recall, 3))
+
+# Förvirringsmatris
+cm = confusion_matrix(y_test, y_pred)
+plt.figure(figsize=(6, 5))
+sns.heatmap(cm, annot=True, cmap="Blues", fmt="d",
+            xticklabels=target_names,
+            yticklabels=target_names)
+plt.title("Förvirringsmatris för modellen")
+plt.xlabel("Prediktion")
+plt.ylabel("Faktisk klass")
+plt.draw()
+plt.pause(4)
+plt.close()
+
+# Feature importance
+importances = modell.feature_importances_
+plt.figure(figsize=(8, 5))
+sns.barplot(x=importances, y=feature_names, color="skyblue")
+plt.title("Feature importance för modellen")
+plt.xlabel("Vikt")
+plt.ylabel("Feature")
+plt.draw()
+plt.pause(4)
+plt.close()
