@@ -1,0 +1,14 @@
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+import pandas as pd
+
+iris = load_iris()
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+
+plt.figure(figsize=(8,5))
+plt.scatter(df["sepal length (cm)"], df["petal length (cm)"], c="green", alpha=0.6)
+plt.title("Samband mellan sepal length och petal length")
+plt.xlabel("Sepal length (cm)")
+plt.ylabel("Petal length (cm)")
+plt.grid(alpha=0.3)
+plt.show()
