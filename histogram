@@ -1,0 +1,14 @@
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+import pandas as pd
+
+iris = load_iris()
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+
+plt.figure(figsize=(8,5))
+plt.hist(df["petal length (cm)"], bins=20, color="steelblue", edgecolor="black")
+plt.title("Fördelning av petal length i Iris-datasetet")
+plt.xlabel("Petal length (cm)")
+plt.ylabel("Antal observationer")
+plt.grid(axis="y", alpha=0.3)
+plt.show()
